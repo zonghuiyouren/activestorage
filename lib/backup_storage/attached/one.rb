@@ -1,5 +1,5 @@
 # Representation of a single attachment to a model.
-class ActiveStorage::Attached::One < ActiveStorage::Attached
+class BackupStorage::Attached::One < BackupStorage::Attached
   delegate_missing_to :attachment
 
   # Returns the associated attachment record.
@@ -16,10 +16,10 @@ class ActiveStorage::Attached::One < ActiveStorage::Attached
   #   person.avatar.attach(params[:avatar]) # ActionDispatch::Http::UploadedFile object
   #   person.avatar.attach(params[:signed_blob_id]) # Signed reference to blob from direct upload
   #   person.avatar.attach(io: File.open("~/face.jpg"), filename: "face.jpg", content_type: "image/jpg")
-  #   person.avatar.attach(avatar_blob) # ActiveStorage::Blob object
+  #   person.avatar.attach(avatar_blob) # BackupStorage::Blob object
   def attach(attachable)
     write_attachment \
-      ActiveStorage::Attachment.create!(record: record, name: name, blob: create_blob_from(attachable))
+      BackupStorage::Attachment.create!(record: record, name: name, blob: create_blob_from(attachable))
   end
 
   # Returns true if an attachment has been made.

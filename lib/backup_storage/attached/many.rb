@@ -1,5 +1,5 @@
 # Decorated proxy object representing of multiple attachments to a model.
-class ActiveStorage::Attached::Many < ActiveStorage::Attached
+class BackupStorage::Attached::Many < BackupStorage::Attached
   delegate_missing_to :attachments
 
   # Returns all the associated attachment records.

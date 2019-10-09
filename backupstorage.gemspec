@@ -4,7 +4,7 @@ Gem::Specification.new do |s|
   s.authors  = "Yang Lu"
   s.email    = "yanglu19861031sa@gmail.com"
   s.summary  = "Attach cloud and local files in Rails applications"
-  s.homepage = "https://github.com/zonghuiyouren/activestorage"
+  s.homepage = "https://github.com/zonghuiyouren/backupstorage"
   s.license  = "MIT"
 
   s.required_ruby_version = ">= 2.2.2"

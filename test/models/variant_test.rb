@@ -1,7 +1,7 @@
 require "test_helper"
 require "database/setup"
 
-class ActiveStorage::VariantTest < ActiveSupport::TestCase
+class BackupStorage::VariantTest < ActiveSupport::TestCase
   setup do
     @blob = create_image_blob filename: "racecar.jpg"
   end

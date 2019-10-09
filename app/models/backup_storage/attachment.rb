@@ -1,15 +1,15 @@
-require "active_storage/blob"
+require "backup_storage/blob"
 require "active_support/core_ext/module/delegation"
 
 # Attachments associate records with blobs. Usually that's a one record-many blobs relationship, 
 # but it is possible to associate many different records with the same blob. If you're doing that,
 # you'll want to declare with `has_one/many_attached :thingy, dependent: false`, so that destroying
 # any one record won't destroy the blob as well. (Then you'll need to do your own garbage collecting, though).
-class ActiveStorage::Attachment < ActiveRecord::Base
-  self.table_name = "active_storage_attachments"
+class BackupStorage::Attachment < ActiveRecord::Base
+  self.table_name = "backup_storage_attachments"
 
   belongs_to :record, polymorphic: true
-  belongs_to :blob, class_name: "ActiveStorage::Blob"
+  belongs_to :blob, class_name: "BackupStorage::Blob"
 
   delegate_missing_to :blob
 
@@ -24,6 +24,6 @@ class ActiveStorage::Attachment < ActiveRecord::Base
   # talking over the internet. Whenever you're doing that, it's a good idea to put that work in a job,
   # so it doesn't hold up other operations. That's what #purge_later provides.
   def purge_later
-    ActiveStorage::PurgeJob.perform_later(self)
+    BackupStorage::PurgeJob.perform_later(self)
   end
 end

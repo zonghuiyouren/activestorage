@@ -2,10 +2,10 @@ require "service/shared_service_tests"
 require "httparty"
 
 if SERVICE_CONFIGURATIONS[:s3]
-  class ActiveStorage::Service::S3ServiceTest < ActiveSupport::TestCase
-    SERVICE = ActiveStorage::Service.configure(:s3, SERVICE_CONFIGURATIONS)
+  class BackupStorage::Service::S3ServiceTest < ActiveSupport::TestCase
+    SERVICE = BackupStorage::Service.configure(:s3, SERVICE_CONFIGURATIONS)
 
-    include ActiveStorage::Service::SharedServiceTests
+    include BackupStorage::Service::SharedServiceTests
 
     test "direct upload" do
       begin
@@ -34,7 +34,7 @@ if SERVICE_CONFIGURATIONS[:s3]
 
     test "uploading with server-side encryption" do
       config  = SERVICE_CONFIGURATIONS.deep_merge(s3: { upload: { server_side_encryption: "AES256" }})
-      service = ActiveStorage::Service.configure(:s3, config)
+      service = BackupStorage::Service.configure(:s3, config)
 
       begin
         key  = SecureRandom.base58(24)

@@ -1,6 +1,6 @@
 require "active_support/log_subscriber"
 
-class ActiveStorage::LogSubscriber < ActiveSupport::LogSubscriber
+class BackupStorage::LogSubscriber < ActiveSupport::LogSubscriber
   def service_upload(event)
     message = "Uploaded file to key: #{key_in(event)}"
     message << " (checksum: #{event.payload[:checksum]})" if event.payload[:checksum]
@@ -24,7 +24,7 @@ class ActiveStorage::LogSubscriber < ActiveSupport::LogSubscriber
   end
 
   def logger
-    ActiveStorage::Service.logger
+    BackupStorage::Service.logger
   end
 
   private
@@ -45,4 +45,4 @@ class ActiveStorage::LogSubscriber < ActiveSupport::LogSubscriber
     end
 end
 
-ActiveStorage::LogSubscriber.attach_to :active_storage
+BackupStorage::LogSubscriber.attach_to :backup_storage

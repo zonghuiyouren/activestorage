@@ -1,9 +1,9 @@
 require "active_support/core_ext/module/delegation"
 
-# Wraps a set of mirror services and provides a single `ActiveStorage::Service` object that will all
+# Wraps a set of mirror services and provides a single `BackupStorage::Service` object that will all
 # have the files uploaded to them. A `primary` service is designated to answer calls to `download`, `exists?`,
 # and `url`.
-class ActiveStorage::Service::MirrorService < ActiveStorage::Service
+class BackupStorage::Service::MirrorService < BackupStorage::Service
   attr_reader :primary, :mirrors
 
   delegate :download, :exist?, :url, to: :primary
@@ -20,7 +20,7 @@ class ActiveStorage::Service::MirrorService < ActiveStorage::Service
   end
 
   # Upload the `io` to the `key` specified to all services. If a `checksum` is provided, all services will
-  # ensure a match when the upload has completed or raise an `ActiveStorage::IntegrityError`.
+  # ensure a match when the upload has completed or raise an `BackupStorage::IntegrityError`.
   def upload(key, io, checksum: nil)
     each_service.collect do |service|
       service.upload key, io.tap(&:rewind), checksum: checksum

@@ -1,9 +1,9 @@
 require "google/cloud/storage"
 require "active_support/core_ext/object/to_query"
 
-# Wraps the Google Cloud Storage as a Active Storage service. See `ActiveStorage::Service` for the generic API
+# Wraps the Google Cloud Storage as a Backup Storage service. See `BackupStorage::Service` for the generic API
 # documentation that applies to all services.
-class ActiveStorage::Service::GCSService < ActiveStorage::Service
+class BackupStorage::Service::GCSService < BackupStorage::Service
   attr_reader :client, :bucket
 
   def initialize(project:, keyfile:, bucket:)
@@ -16,7 +16,7 @@ class ActiveStorage::Service::GCSService < ActiveStorage::Service
       begin
         bucket.create_file(io, key, md5: checksum)
       rescue Google::Cloud::InvalidArgumentError
-        raise ActiveStorage::IntegrityError
+        raise BackupStorage::IntegrityError
       end
     end
   end

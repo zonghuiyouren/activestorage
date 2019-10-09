@@ -2,9 +2,9 @@ require "active_support/core_ext/numeric/bytes"
 require "azure/storage"
 require "azure/storage/core/auth/shared_access_signature"
 
-# Wraps the Microsoft Azure Storage Blob Service as a Active Storage service.
-# See `ActiveStorage::Service` for the generic API documentation that applies to all services.
-class ActiveStorage::Service::AzureService < ActiveStorage::Service
+# Wraps the Microsoft Azure Storage Blob Service as a Backup Storage service.
+# See `BackupStorage::Service` for the generic API documentation that applies to all services.
+class BackupStorage::Service::AzureService < BackupStorage::Service
   attr_reader :client, :path, :blobs, :container, :signer
 
   def initialize(path:, storage_account_name:, storage_access_key:, container:)
@@ -20,7 +20,7 @@ class ActiveStorage::Service::AzureService < ActiveStorage::Service
       begin
         blobs.create_block_blob(container, key, io, content_md5: checksum)
       rescue Azure::Core::Http::HTTPError => e
-        raise ActiveStorage::IntegrityError
+        raise BackupStorage::IntegrityError
       end
     end
   end

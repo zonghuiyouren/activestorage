@@ -2,10 +2,10 @@ require "service/shared_service_tests"
 require "httparty"
 
 if SERVICE_CONFIGURATIONS[:gcs]
-  class ActiveStorage::Service::GCSServiceTest < ActiveSupport::TestCase
-    SERVICE = ActiveStorage::Service.configure(:gcs, SERVICE_CONFIGURATIONS)
+  class BackupStorage::Service::GCSServiceTest < ActiveSupport::TestCase
+    SERVICE = BackupStorage::Service.configure(:gcs, SERVICE_CONFIGURATIONS)
 
-    include ActiveStorage::Service::SharedServiceTests
+    include BackupStorage::Service::SharedServiceTests
 
     test "direct upload" do
       begin

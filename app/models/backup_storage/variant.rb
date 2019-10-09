@@ -1,4 +1,4 @@
-require "active_storage/blob"
+require "backup_storage/blob"
 
 # Image blobs can have variants that are the result of a set of transformations applied to the original.
 # These variants are used to create thumbnails, fixed-size avatars, or any other derivative image from the
@@ -11,14 +11,14 @@ require "active_storage/blob"
 # into memory. The larger the image, the more memory is used. Because of this process, you also want to be
 # considerate about when the variant is actually processed. You shouldn't be processing variants inline in a
 # template, for example. Delay the processing to an on-demand controller, like the one provided in
-# `ActiveStorage::VariantsController`.
+# `BackupStorage::VariantsController`.
 #
 # To refer to such a delayed on-demand variant, simply link to the variant through the resolved route provided
-# by Active Storage like so:
+# by Backup Storage like so:
 #
 #   <%= image_tag url_for(Current.user.avatar.variant(resize: "100x100")) %>
 #
-# This will create a URL for that specific blob with that specific variant, which the `ActiveStorage::VariantsController`
+# This will create a URL for that specific blob with that specific variant, which the `BackupStorage::VariantsController`
 # can then produce on-demand.
 #
 # When you do want to actually produce the variant needed, call `#processed`. This will check that the variant
@@ -34,7 +34,7 @@ require "active_storage/blob"
 # combine as many as you like freely:
 #
 #   avatar.variant(resize: "100x100", monochrome: true, flip: "-90")
-class ActiveStorage::Variant
+class BackupStorage::Variant
   attr_reader :blob, :variation
   delegate :service, to: :blob
 
@@ -59,7 +59,7 @@ class ActiveStorage::Variant
   # it allows permanent URLs that redirec to the `service_url` to be cached in the view.
   #
   # Use `url_for(variant)` (or the implied form, like `link_to variant` or `redirect_to variant`) to get the stable URL
-  # for a variant that points to the `ActiveStorage::VariantsController`, which in turn will use this `#service_call` method
+  # for a variant that points to the `BackupStorage::VariantsController`, which in turn will use this `#service_call` method
   # for its redirection.
   def service_url(expires_in: 5.minutes, disposition: :inline)
     service.url key, expires_in: expires_in, disposition: disposition, filename: blob.filename, content_type: blob.content_type

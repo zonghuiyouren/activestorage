@@ -1,19 +1,20 @@
 require "service/shared_service_tests"
 
-class ActiveStorage::Service::MirrorServiceTest < ActiveSupport::TestCase
+class BackupStorage::Service::MirrorServiceTest < ActiveSupport::TestCase
+  
   mirror_config = (1..3).map do |i|
     [ "mirror_#{i}",
       service: "Disk",
-      root: Dir.mktmpdir("active_storage_tests_mirror_#{i}") ]
+      root: Dir.mktmpdir("backup_storage_tests_mirror_#{i}") ]
   end.to_h
 
   config = mirror_config.merge \
     mirror:   { service: "Mirror", primary: "primary", mirrors: mirror_config.keys },
-    primary:  { service: "Disk", root: Dir.mktmpdir("active_storage_tests_primary") }
+    primary:  { service: "Disk", root: Dir.mktmpdir("backup_storage_tests_primary") }
 
-  SERVICE = ActiveStorage::Service.configure :mirror, config
+  SERVICE = BackupStorage::Service.configure :mirror, config
 
-  include ActiveStorage::Service::SharedServiceTests
+  include BackupStorage::Service::SharedServiceTests
 
   test "uploading to all services" do
     begin

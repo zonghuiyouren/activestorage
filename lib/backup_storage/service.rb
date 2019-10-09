@@ -1,4 +1,4 @@
-require "active_storage/log_subscriber"
+require "backup_storage/log_subscriber"
 
 # Abstract class serving as an interface for concrete services.
 #
@@ -22,17 +22,17 @@ require "active_storage/log_subscriber"
 # Then, in your application's configuration, you can specify the service to
 # use like this:
 #
-#   config.active_storage.service = :local
+#   config.backup_storage.service = :local
 #
-# If you are using Active Storage outside of a Ruby on Rails application, you
+# If you are using Backup Storage outside of a Ruby on Rails application, you
 # can configure the service to use like this:
 #
-#   ActiveStorage::Blob.service = ActiveStorage::Service.configure(
+#   BackupStorage::Blob.service = BackupStorage::Service.configure(
 #     :Disk,
 #     root: Pathname("/foo/bar/storage")
 #   )
-class ActiveStorage::Service
-  class ActiveStorage::IntegrityError < StandardError; end
+class BackupStorage::Service
+  class BackupStorage::IntegrityError < StandardError; end
 
   extend ActiveSupport::Autoload
   autoload :Configurator
@@ -40,9 +40,9 @@ class ActiveStorage::Service
   class_attribute :logger
 
   class << self
-    # Configure an Active Storage service by name from a set of configurations,
-    # typically loaded from a YAML file. The Active Storage engine uses this
-    # to set the global Active Storage service when the app boots.
+    # Configure an Backup Storage service by name from a set of configurations,
+    # typically loaded from a YAML file. The Backup Storage engine uses this
+    # to set the global Backup Storage service when the app boots.
     def configure(service_name, configurations)
       Configurator.build(service_name, configurations)
     end
@@ -59,7 +59,7 @@ class ActiveStorage::Service
   end
 
   # Upload the `io` to the `key` specified. If a `checksum` is provided, the service will
-  # ensure a match when the upload has completed or raise an `ActiveStorage::IntegrityError`.
+  # ensure a match when the upload has completed or raise an `BackupStorage::IntegrityError`.
   def upload(key, io, checksum: nil)
     raise NotImplementedError
   end
@@ -102,12 +102,12 @@ class ActiveStorage::Service
   private
     def instrument(operation, key, payload = {}, &block)
       ActiveSupport::Notifications.instrument(
-        "service_#{operation}.active_storage",
+        "service_#{operation}.backup_storage",
         payload.merge(key: key, service: service_name), &block)
     end
 
     def service_name
-      # ActiveStorage::Service::DiskService => Disk
+      # BackupStorage::Service::DiskService => Disk
       self.class.name.split("::").third.remove("Service")
     end
 end

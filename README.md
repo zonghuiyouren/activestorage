@@ -1,6 +1,6 @@
-# Active Storage
+# Backup Storage
 
-Active Storage makes it simple to upload and reference files in cloud services, like Amazon S3 or Google Cloud Storage,
+Backup Storage makes it simple to upload and reference files in cloud services, like Amazon S3 or Google Cloud Storage,
 and attach those files to Active Records. It also provides a disk service for testing or local deployments, but the
 focus is on cloud storage.
 
@@ -11,7 +11,7 @@ MiniMagick supported transformation.
 
 ## Compared to other storage solutions
 
-A key difference to how Active Storage works compared to other attachment solutions in Rails is through the use of built-in [Blob](https://github.com/rails/activestorage/blob/master/app/models/active_storage/blob.rb) and [Attachment](https://github.com/rails/activestorage/blob/master/app/models/active_storage/attachment.rb) models (backed by Active Record). This means existing application models do not need to be modified with additional columns to associate with files. Active Storage uses polymorphic associations via the join model of `Attachment`, which then connects to the actual `Blob`.
+A key difference to how Backup Storage works compared to other attachment solutions in Rails is through the use of built-in [Blob](https://github.com/rails/backupstorage/blob/master/app/models/backup_storage/blob.rb) and [Attachment](https://github.com/rails/backupstorage/blob/master/app/models/backup_storage/attachment.rb) models (backed by Active Record). This means existing application models do not need to be modified with additional columns to associate with files. Backup Storage uses polymorphic associations via the join model of `Attachment`, which then connects to the actual `Blob`.
 
 These `Blob` models are intended to be immutable in spirit. One file, one blob. You can associate the same blob with multiple application models as well. And if you want to do transformations of a given `Blob`, the idea is that you'll simply create a new one, rather than attempt to mutate the existing (though of course you can delete that later if you don't need it).
 
@@ -87,10 +87,10 @@ Variation of image attachment:
 
 ## Installation
 
-1. Add `gem "activestorage", git: "https://github.com/rails/activestorage.git"` to your Gemfile.
-2. Add `require "active_storage"` to config/application.rb, after `require "rails/all"` line.
-3. Run `rails activestorage:install` to create needed directories, migrations, and configuration.
-4. Configure the storage service in `config/environments/*` with `config.active_storage.service = :local`
+1. Add `gem "backupstorage", git: "https://github.com/rails/backupstorage.git"` to your Gemfile.
+2. Add `require "backup_storage"` to config/application.rb, after `require "rails/all"` line.
+3. Run `rails backupstorage:install` to create needed directories, migrations, and configuration.
+4. Configure the storage service in `config/environments/*` with `config.backup_storage.service = :local`
    that references the services configured in `config/storage_services.yml`.
 5. Optional: Add `gem "aws-sdk", "~> 2"` to your Gemfile if you want to use AWS S3.
 6. Optional: Add `gem "google-cloud-storage", "~> 1.3"` to your Gemfile if you want to use Google Cloud Storage.
@@ -98,20 +98,20 @@ Variation of image attachment:
 
 ## Direct uploads
 
-Active Storage, with its included JavaScript library, supports uploading directly from the client to the cloud.
+Backup Storage, with its included JavaScript library, supports uploading directly from the client to the cloud.
 
 ### Direct upload installation
 
-1. Include `activestorage.js` in your application's JavaScript bundle.
+1. Include `backupstorage.js` in your application's JavaScript bundle.
 
     Using the asset pipeline:
     ```js
-    //= require activestorage
+    //= require backupstorage
     ```
     Using the npm package:
     ```js
-    import * as ActiveStorage from "activestorage"
-    ActiveStorage.start()
+    import * as BackupStorage from "backupstorage"
+    BackupStorage.start()
     ```
 2. Annotate file inputs with the direct upload URL.
 
@@ -136,9 +136,9 @@ Active Storage, with its included JavaScript library, supports uploading directl
 
 ## Compatibility & Expectations
 
-Active Storage only works with the development version of Rails 5.2+ (as of July 19, 2017). This separate repository is a staging ground for the upcoming inclusion in rails/rails prior to the Rails 5.2 release. It is not intended to be a long-term stand-alone repository.
+Backup Storage only works with the development version of Rails 5.2+ (as of July 19, 2017). This separate repository is a staging ground for the upcoming inclusion in rails/rails prior to the Rails 5.2 release. It is not intended to be a long-term stand-alone repository.
 
-Furthermore, this repository is likely to be in heavy flux prior to the merge to rails/rails. You're heartedly encouraged to follow along and even use Active Storage in this phase, but don't be surprised if the API suffers frequent breaking changes prior to the merge.
+Furthermore, this repository is likely to be in heavy flux prior to the merge to rails/rails. You're heartedly encouraged to follow along and even use Backup Storage in this phase, but don't be surprised if the API suffers frequent breaking changes prior to the merge.
 
 ## Todos
 
@@ -148,4 +148,4 @@ Furthermore, this repository is likely to be in heavy flux prior to the merge to
 
 ## License
 
-Active Storage is released under the [MIT License](https://opensource.org/licenses/MIT).
+Backup Storage is released under the [MIT License](https://opensource.org/licenses/MIT).

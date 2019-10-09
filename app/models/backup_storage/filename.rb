@@ -1,6 +1,6 @@
 # Encapsulates a string representing a filename to provide convenience access to parts of it and a sanitized version.
-# This is what's returned by `ActiveStorage::Blob#filename`. A Filename instance is comparable so it can be used for sorting.
-class ActiveStorage::Filename
+# This is what's returned by `BackupStorage::Blob#filename`. A Filename instance is comparable so it can be used for sorting.
+class BackupStorage::Filename
   include Comparable
 
   def initialize(filename)

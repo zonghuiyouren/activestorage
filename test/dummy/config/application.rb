@@ -13,13 +13,13 @@ require "sprockets/railtie"
 
 
 Bundler.require(*Rails.groups)
-require "active_storage"
+require "backup_storage"
 
 module Dummy
   class Application < Rails::Application
     config.load_defaults 5.1
 
-    config.active_storage.service = :local
+    config.backup_storage.service = :local
   end
 end
 

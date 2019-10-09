@@ -1,4 +1,4 @@
-class ActiveStorage::Service::Configurator #:nodoc:
+class BackupStorage::Service::Configurator #:nodoc:
   attr_reader :configurations
 
   def self.build(service_name, configurations)
@@ -17,12 +17,12 @@ class ActiveStorage::Service::Configurator #:nodoc:
   private
     def config_for(name)
       configurations.fetch name do
-        raise "Missing configuration for the #{name.inspect} Active Storage service. Configurations available for #{configurations.keys.inspect}"
+        raise "Missing configuration for the #{name.inspect} Backup Storage service. Configurations available for #{configurations.keys.inspect}"
       end
     end
 
     def resolve(class_name)
-      require "active_storage/service/#{class_name.to_s.downcase}_service"
-      ActiveStorage::Service.const_get(:"#{class_name}Service")
+      require "backup_storage/service/#{class_name.to_s.downcase}_service"
+      BackupStorage::Service.const_get(:"#{class_name}Service")
     end
 end

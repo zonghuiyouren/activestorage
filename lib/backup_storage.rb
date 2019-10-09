@@ -22,9 +22,9 @@
 #++
 
 require "active_record"
-require "active_storage/engine"
+require "backup_storage/engine"
 
-module ActiveStorage
+module BackupStorage
   extend ActiveSupport::Autoload
 
   autoload :Attached

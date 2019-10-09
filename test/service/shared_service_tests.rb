@@ -1,7 +1,7 @@
 require "test_helper"
 require "active_support/core_ext/securerandom"
 
-module ActiveStorage::Service::SharedServiceTests
+module BackupStorage::Service::SharedServiceTests
   extend ActiveSupport::Concern
 
   FIXTURE_KEY  = SecureRandom.base58(24)
@@ -34,7 +34,7 @@ module ActiveStorage::Service::SharedServiceTests
         key  = SecureRandom.base58(24)
         data = "Something else entirely!"
 
-        assert_raises(ActiveStorage::IntegrityError) do
+        assert_raises(BackupStorage::IntegrityError) do
           @service.upload(key, StringIO.new(data), checksum: Digest::MD5.base64digest("bad data"))
         end
 

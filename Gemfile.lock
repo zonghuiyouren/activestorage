@@ -70,7 +70,7 @@ GIT
 PATH
   remote: .
   specs:
-    activestorage (0.1)
+    backupstorage (0.1)
       rails (>= 5.2.0.alpha)
 
 GEM
@@ -215,7 +215,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  activestorage!
+  backupstorage!
   aws-sdk (~> 2)
   azure-core!
   azure-storage

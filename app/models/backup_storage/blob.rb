@@ -1,8 +1,8 @@
-require "active_storage/service"
-require "active_storage/filename"
-require "active_storage/purge_job"
-require "active_storage/variant"
-require "active_storage/variation"
+require "backup_storage/service"
+require "backup_storage/filename"
+require "backup_storage/purge_job"
+require "backup_storage/variant"
+require "backup_storage/variation"
 
 # A blob is a record that contains the metadata about a file and a key for where that file resides on the service.
 # Blobs can be created in two ways:
@@ -17,8 +17,8 @@ require "active_storage/variation"
 # Blobs are intended to be immutable in as-so-far as their reference to a specific file goes. You're allowed to
 # update a blob's metadata on a subsequent pass, but you should not update the key or change the uploaded file.
 # If you need to create a derivative or otherwise change the blob, simply create a new blob and purge the old.
-class ActiveStorage::Blob < ActiveRecord::Base
-  self.table_name = "active_storage_blobs"
+class BackupStorage::Blob < ActiveRecord::Base
+  self.table_name = "backup_storage_blobs"
 
   has_secure_token :key
   store :metadata, coder: JSON
@@ -32,7 +32,7 @@ class ActiveStorage::Blob < ActiveRecord::Base
     #
     # The signed id is also used to create stable URLs for the blob through the BlobsController.
     def find_signed(id)
-      find ActiveStorage.verifier.verify(id, purpose: :blob_id)
+      find BackupStorage.verifier.verify(id, purpose: :blob_id)
     end
 
     # Returns a new, unsaved blob instance after the `io` has been uploaded to the service.
@@ -65,9 +65,9 @@ class ActiveStorage::Blob < ActiveRecord::Base
 
 
   # Returns a signed ID for this blob that's suitable for reference on the client-side without fear of tampering.
-  # It uses the framework-wide verifier on `ActiveStorage.verifier`, but with a dedicated purpose.
+  # It uses the framework-wide verifier on `BackupStorage.verifier`, but with a dedicated purpose.
   def signed_id
-    ActiveStorage.verifier.generate(id, purpose: :blob_id)
+    BackupStorage.verifier.generate(id, purpose: :blob_id)
   end
 
   # Returns the key pointing to the file on the service that's associated with this blob. The key is in the
@@ -78,10 +78,10 @@ class ActiveStorage::Blob < ActiveRecord::Base
     self[:key] ||= self.class.generate_unique_secure_token
   end
 
-  # Returns a `ActiveStorage::Filename` instance of the filename that can be queried for basename, extension, and
+  # Returns a `BackupStorage::Filename` instance of the filename that can be queried for basename, extension, and
   # a sanitized version of the filename that's safe to use in URLs.
   def filename
-    ActiveStorage::Filename.new(self[:filename])
+    BackupStorage::Filename.new(self[:filename])
   end
 
   # Returns true if the content_type of this blob is in the image range, like image/png.
@@ -96,7 +96,7 @@ class ActiveStorage::Blob < ActiveRecord::Base
   # Returns true if the content_type of this blob is in the text range, like text/plain.
   def text?()  content_type =~ /^text/  end
 
-  # Returns a `ActiveStorage::Variant` instance with the set of `transformations` passed in. This is only relevant
+  # Returns a `BackupStorage::Variant` instance with the set of `transformations` passed in. This is only relevant
   # for image files, and it allows any image to be transformed for size, colors, and the like. Example:
   #
   #   avatar.variant(resize: "100x100").processed.service_url
@@ -109,10 +109,10 @@ class ActiveStorage::Blob < ActiveRecord::Base
   #
   #   <%= image_tag url_for(Current.user.avatar.variant(resize: "100x100")) %>
   #
-  # This will create a URL for that specific blob with that specific variant, which the `ActiveStorage::VariantsController`
+  # This will create a URL for that specific blob with that specific variant, which the `BackupStorage::VariantsController`
   # can then produce on-demand.
   def variant(transformations)
-    ActiveStorage::Variant.new(self, ActiveStorage::Variation.new(transformations))
+    BackupStorage::Variant.new(self, BackupStorage::Variation.new(transformations))
   end
 
 
@@ -174,10 +174,10 @@ class ActiveStorage::Blob < ActiveRecord::Base
     destroy
   end
 
-  # Enqueues a `ActiveStorage::PurgeJob` job that'll call `#purge`. This is the recommended way to purge blobs when the call
+  # Enqueues a `BackupStorage::PurgeJob` job that'll call `#purge`. This is the recommended way to purge blobs when the call
   # needs to be made from a transaction, a callback, or any other real-time scenario.
   def purge_later
-    ActiveStorage::PurgeJob.perform_later(self)
+    BackupStorage::PurgeJob.perform_later(self)
   end
 
   private

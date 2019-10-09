@@ -1,7 +1,7 @@
 require "test_helper"
 require "database/setup"
 
-class ActiveStorage::BlobTest < ActiveSupport::TestCase
+class BackupStorage::BlobTest < ActiveSupport::TestCase
   test "create after upload sets byte size and checksum" do
     data = "Hello world!"
     blob = create_blob data: data
@@ -42,6 +42,6 @@ class ActiveStorage::BlobTest < ActiveSupport::TestCase
   private
     def expected_url_for(blob, disposition: :inline)
       query_string = { content_type: blob.content_type, disposition: disposition }.to_param
-      "/rails/active_storage/disk/#{ActiveStorage.verifier.generate(blob.key, expires_in: 5.minutes, purpose: :blob_key)}/#{blob.filename}?#{query_string}"
+      "/rails/backup_storage/disk/#{BackupStorage.verifier.generate(blob.key, expires_in: 5.minutes, purpose: :blob_key)}/#{blob.filename}?#{query_string}"
     end
 end

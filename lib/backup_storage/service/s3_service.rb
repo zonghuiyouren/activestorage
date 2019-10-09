@@ -1,9 +1,9 @@
 require "aws-sdk"
 require "active_support/core_ext/numeric/bytes"
 
-# Wraps the Amazon Simple Storage Service (S3) as a Active Storage service.
-# See `ActiveStorage::Service` for the generic API documentation that applies to all services.
-class ActiveStorage::Service::S3Service < ActiveStorage::Service
+# Wraps the Amazon Simple Storage Service (S3) as a Backup Storage service.
+# See `BackupStorage::Service` for the generic API documentation that applies to all services.
+class BackupStorage::Service::S3Service < BackupStorage::Service
   attr_reader :client, :bucket, :upload_options
 
   def initialize(access_key_id:, secret_access_key:, region:, bucket:, upload: {}, **options)
@@ -18,7 +18,7 @@ class ActiveStorage::Service::S3Service < ActiveStorage::Service
       begin
         object_for(key).put(upload_options.merge(body: io, content_md5: checksum))
       rescue Aws::S3::Errors::BadDigest
-        raise ActiveStorage::IntegrityError
+        raise BackupStorage::IntegrityError
       end
     end
   end

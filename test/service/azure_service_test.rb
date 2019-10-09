@@ -3,10 +3,10 @@ require "httparty"
 require "uri"
 
 if SERVICE_CONFIGURATIONS[:azure]
-  class ActiveStorage::Service::AzureServiceTest < ActiveSupport::TestCase
-    SERVICE = ActiveStorage::Service.configure(:azure, SERVICE_CONFIGURATIONS)
+  class BackupStorage::Service::AzureServiceTest < ActiveSupport::TestCase
+    SERVICE = BackupStorage::Service.configure(:azure, SERVICE_CONFIGURATIONS)
 
-    include ActiveStorage::Service::SharedServiceTests
+    include BackupStorage::Service::SharedServiceTests
   end
 
 else

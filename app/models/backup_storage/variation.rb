@@ -1,27 +1,27 @@
 require "active_support/core_ext/object/inclusion"
 
 # A set of transformations that can be applied to a blob to create a variant. This class is exposed via 
-# the `ActiveStorage::Blob#variant` method and should rarely be used directly.
+# the `BackupStorage::Blob#variant` method and should rarely be used directly.
 #
 # In case you do need to use this directly, it's instantiated using a hash of transformations where
 # the key is the command and the value is the arguments. Example:
 #
-#   ActiveStorage::Variation.new(resize: "100x100", monochrome: true, trim: true, rotate: "-90")
+#   BackupStorage::Variation.new(resize: "100x100", monochrome: true, trim: true, rotate: "-90")
 #
 # A list of all possible transformations is available at https://www.imagemagick.org/script/mogrify.php.
-class ActiveStorage::Variation
+class BackupStorage::Variation
   attr_reader :transformations
 
   class << self
     # Returns a variation instance with the transformations that were encoded by `#encode`.
     def decode(key)
-      new ActiveStorage.verifier.verify(key, purpose: :variation)
+      new BackupStorage.verifier.verify(key, purpose: :variation)
     end
 
     # Returns a signed key for the `transformations`, which can be used to refer to a specific
-    # variation in a URL or combined key (like `ActiveStorage::Variant#key`).
+    # variation in a URL or combined key (like `BackupStorage::Variant#key`).
     def encode(transformations)
-      ActiveStorage.verifier.generate(transformations, purpose: :variation)
+      BackupStorage.verifier.generate(transformations, purpose: :variation)
     end
   end
 
